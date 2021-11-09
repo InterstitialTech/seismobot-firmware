@@ -2,10 +2,8 @@
 microcontroller firmware for the Seismobot geophone board
 
 ## Dependencies
-1. libopencm3
-    1. add the following line to ld/devices.data:
-```samd09?13* samd ROM=8K RAM=4K```
-2. openocd
+1. libopencm3 >= [474ca02](https://github.com/libopencm3/libopencm3/commit/474ca02a60301b6ed20ab4f395878536259de681)
+2. openocd >= 0.10.0
 
 ## Build + flash
 ```
