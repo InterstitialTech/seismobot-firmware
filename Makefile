@@ -1,4 +1,4 @@
-OPENCM3_DIR = /home/chrono/software/libopencm3
+OPENCM3_DIR = /home/joshua/Documents/seismobot-firmware/libopencm3
 PROJECT = seismobot
 CFILES += src/main.c
 DEVICE = samd09c13a
