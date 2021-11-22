@@ -62,25 +62,9 @@ int main(void) {
         PORT_OUTCLR(PORTA) = (1 << PIN_CS);
         while(gpio_get(PORTA, (1<<4))==(1<<4));
         unsigned long tmp = max_read();
-        //char temp[8];
-        //sprintf((char*)temp,"%u",tmp);
-        //for 
         myprintln(tmp);
-        //usart_tx32(tmp);
         mydel(1);
     }
-/*
- 
-  digitalWrite(SSS, LOW);
-  while(digitalRead(12)==HIGH){}
-  long tmp = adcMax11210.read();
-  Serial.println(tmp);
-  if(digitalRead(8)==HIGH){
-      digitalWrite(8, LOW);
-    }else{
-      digitalWrite(8, HIGH);
-    }
- */
     return 0;
 
 }
@@ -141,30 +125,27 @@ void usart_tx32(unsigned long mesg){
 }
 
 static void sysctrl_setup(void){
-    //removing prescaler for 8mhz osc
+   //removing prescaler for 8mhz osc
    SYSCTRL_OSC8M = 0x87070082;
    //SYSCTRL_OSC8M |= 0x0030;
 }
 
 static void pm_setup(void){
 
-
     //enable sercom1 sercom0 adc clocks
     PM_APBCMASK = PM_APBCMASK_ADC|PM_APBCMASK_SERCOM1|PM_APBCMASK_SERCOM0;
 
-
-   //PM_APBCMASK(PM_BASE) |= 0b1100; 
-   //enable generic clock 0 for the sercom1 clock module
-   GCLK_CLKCTRL = GCLK_CLKCTRL_CLKEN|GCLK_SERCOM1_CORE*GCLK_CLKCTRL_ID;
-   //enable generic clock 0 for the sercom0 clock module
-   GCLK_CLKCTRL = GCLK_CLKCTRL_CLKEN|GCLK_SERCOM0_CORE*GCLK_CLKCTRL_ID;
+    //enable generic clock 0 for the sercom1 clock module
+    GCLK_CLKCTRL = GCLK_CLKCTRL_CLKEN|GCLK_SERCOM1_CORE*GCLK_CLKCTRL_ID;
+    //enable generic clock 0 for the sercom0 clock module
+    GCLK_CLKCTRL = GCLK_CLKCTRL_CLKEN|GCLK_SERCOM0_CORE*GCLK_CLKCTRL_ID;
    
 
 }
 
 static void usart_setup(void){
     //disable usart
-    //USART_CTRLA(SERCOM1_BASE) &= !USART_CTRLA_ENABLE;
+    USART_CTRLA(SERCOM1_BASE) &= ~USART_CTRLA_ENABLE;
     //internal clock
     USART_CTRLA(SERCOM1_BASE) |= USART_CTRLA_MODE|USART_CTRLA_DORD;
     //asynchronous comms
@@ -211,12 +192,3 @@ static void gpio_setup(void) {
     //PORT_PINCFG(PORT_LED, PIN_LED) = 0;
 
 }
-/*
-unsigned char spitransfer(unsigned char data){
-        SPI_DATA(SERCOM0_BASE) = data;
-        while((SPI_INTFLAG(SERCOM0_BASE)&SPI_INTFLAG_TXC) != SPI_INTFLAG_TXC){} 
-        while((SPI_INTFLAG(SERCOM0_BASE)&SPI_INTFLAG_RXC) != SPI_INTFLAG_RXC){} 
-        unsigned char resp = SPI_DATA(SERCOM0_BASE);
-        return resp;
-}
-*/
